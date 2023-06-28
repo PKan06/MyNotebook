@@ -2,6 +2,10 @@ const express = require('express');
 const User = require('../models/User');
 const router = express.Router();
 const { body, validationResult } = require('express-validator');
+var bcrypt = require('bcrypt'); // bcrypt -> to add a salt on a password to convert it to the safe text
+var jwt = require('jsonwebtoken'); // token is use to sepecify the regular user crediential whether the user modified anything or not  
+
+const JWT_SECRET = "Mehavingagood$$$$"; // this is my VARIFY_SIGNATURE for JWT 
 
 // this will check the validation of the post req send by the user on user.js if fine then add to database 
 var Validaton_auth_schema = [
@@ -31,12 +35,25 @@ router.post('/',Validaton_auth_schema,
                 // returning bad request as we found the user with the same email
                 return res.status(400).json({'error':"Sorry a user with this email already exists"})
             }
+            const salt = await bcrypt.genSalt(10); // genrating slat ehich will be added sfter password before saving to db
+            const secPass = await bcrypt.hash(req.body.password, salt);
             user = await User.create({
                 name : req.body.name,
-                password: req.body.password, 
+                password: secPass, 
                 email : req.body.email
             })
-            res.json(user);
+            // defining the data part for the JWT token 
+            // As id is unique for every data mamber
+            // if the user again login then we will verify using jwt token if there any change with the heder, data, JWT_SECRET 
+            const data = {
+                user:{
+                    id : user.id
+                }
+            };
+            // read about session token && Json web token(HEADER.PAYLOAD.VARIFY_SIGNATURE)
+            const authtoken = jwt.sign(data, JWT_SECRET);
+
+            res.json({authtoken}); // authtoken => authtoken : authtoken
 
         } catch (error) {
             console.log(error.message);
