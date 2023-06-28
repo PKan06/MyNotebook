@@ -52,13 +52,60 @@ router.post('/',Validaton_auth_schema,
             };
             // read about session token && Json web token(HEADER.PAYLOAD.VARIFY_SIGNATURE)
             const authtoken = jwt.sign(data, JWT_SECRET);
-
+            // given to user so that easy login afterwords
             res.json({authtoken}); // authtoken => authtoken : authtoken
-
+            
         } catch (error) {
             console.log(error.message);
             res.status(500).send("Some error Occured")
         }
-})
-
-module.exports = router
+    })
+    
+    // Authenticating a User using : POST "/api/auth/login". No login required
+    var Validaton_login_schema = [
+        // using express validator
+        body('email', 'Enter a valid email').isEmail(),
+        body('password',"Password cannot be blank").exists()
+    ];
+    router.post('/login',Validaton_login_schema, 
+    async (req,res)=>{
+        // error from validation_login_schema
+        const errors = validationResult(req); // if validation is sussesfull then error will be empty 
+        if(!errors.isEmpty())
+        {
+            // if error is not empty then it will send json file as a response to the user 
+            return res.status(400).json({error: errors.array()});
+        }
+        // Destructuring email,password
+        const {email, password} = req.body;
+        try {
+            let user = await User.findOne({email}); // finding is the user login priviously or some fake email
+            // if no user exist the undefine and we know somebody wants to break the authentication and getting in 
+            // so we will display
+            if(!user){
+                return res.status(400).json({error : "Please try to login with correct email"});
+            }
+            // this will genrate hash using the password given by the user and check that hash with the stored value
+            const passwordCompare = await bcrypt.compare(password, user.password);
+            // if the password is wrong 
+            // console.log(passwordCompare); -> promis will writen false if password is not correct 
+            if(!passwordCompare){
+                return res.status(400).json({error : "Please try to login with correct password"});
+            }
+            // giving the data which is used to genrate JWT token 
+            const data = {
+                user:{
+                    id: user.id
+                }
+            }
+            const authtoken = jwt.sign(data, JWT_SECRET);
+            // given to user so that easy login afterwords
+            res.json({authtoken}); // authtoken => authtoken : authtoken
+        } catch (error) {
+            console.log(error.message);
+            res.status(500).send("Some error Occured")
+            
+        }
+    })
+    
+    module.exports = router
