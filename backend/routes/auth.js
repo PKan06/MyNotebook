@@ -13,7 +13,7 @@ var Validaton_auth_schema = [
     ];
 
 router.post('/',Validaton_auth_schema, 
-    (req, res)=>{
+    async (req, res)=>{
         const errors = validationResult(req); // if validation is sussesfull then error will be empty 
         if(!errors.isEmpty())
         {
@@ -22,16 +22,26 @@ router.post('/',Validaton_auth_schema,
         }
         // res.send(req.body); // giving double header problem 
         
-        // creating the data to database 
-        User.create({
-            name : req.body.name,
-            password: req.body.password, 
-            email : req.body.email
-        }).then(User => res.json(User)) // updating the data to database 
-        .catch(err => {
-            console.log(err) // if there is errorr encouter while updating the database then it will display in the consol
-            res.json({"error": 'Please Enter a Unique Value of Email', message: err.message}) // this will send that error to the user for displaying what happend 
-        }); // written promises and catch the error  (catch/then)
+        try {
+            // checking any duplicate value of email in database 
+            let user = await User.findOne({email: req.body.email});// we have to wait until it will check our database for duplicate email entry
+            // we apply await before promis  
+            // console.log(user); // null if any user not find 
+            if(user){
+                // returning bad request as we found the user with the same email
+                return res.status(400).json({'error':"Sorry a user with this email already exists"})
+            }
+            user = await User.create({
+                name : req.body.name,
+                password: req.body.password, 
+                email : req.body.email
+            })
+            res.json(user);
+
+        } catch (error) {
+            console.log(error.message);
+            res.status(500).send("Some error Occured")
+        }
 })
 
 module.exports = router
