@@ -1,6 +1,11 @@
 const mongoose = require('mongoose');
+const { Schema } = mongoose; 
 
 const NotesSchema = new Schema({
+    user:{
+        type: mongoose.Schema.Types.ObjectId, // it will assign the used id to notes schema as a F.K. 
+        ref: 'user' // for refrence db
+    },
     title:{
         type: String,
         require : true
