@@ -64,6 +64,7 @@ async(req,res)=>{
         // chacking note id
         let note  = await Note.findById(req.params.id); // this will fetch the note from db which has same id as given in the reqest url
         // let have scope inside the block
+        // checking note exist or not
         if(!note){
             return res.status(404).send("Not Found");
         } // if no note exist havinf id given in params then page note found error will br given
@@ -77,6 +78,35 @@ async(req,res)=>{
         //                                      note id   ,  giving the updated info , send new info
         note = await Note.findByIdAndUpdate(req.params.id , {$set : newNote}, {new:true});
         res.json({note});
+
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).send("Some error Occured");
+    }
+}) 
+
+// ROUTER 3: Delete a existing notes using : DELETE"/api/notes/deletenote/:id". Login required
+router.delete('/deletenote/:id', fetchuser , 
+async(req,res)=>{
+    try {
+        // destructuring
+        const {title, description , tag} = req.body;
+        
+        // Find the note to be deleted and delete it
+        let note  = await Note.findById(req.params.id); // this will fetch the note from db which has same id as given in the reqest url
+        // let have scope inside the block
+        // checking note exist or not
+        if(!note){
+            return res.status(404).send("Not Found");
+        } // if no note exist havinf id given in params then page note found error will br given
+        
+        // Allow the deletion only if user owns this note
+        if(note.user.toString() != req.user.id){
+            return res.status(401).send("Not Allowed");
+        } // user try to change someones other user data using its login
+        
+        note = await Note.findByIdAndDelete(req.params.id);
+        res.json({"Success":"Note has been deleted"});
 
     } catch (error) {
         console.log(error.message);
