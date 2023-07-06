@@ -1,6 +1,5 @@
 import React from 'react'
 import Note from './Notes'
-import AddNote from './AddNote'
 
 const Home = () => {
   

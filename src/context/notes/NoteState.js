@@ -1,97 +1,112 @@
 import { useState } from "react";
 import NoteContext from "./noteContext";
 
+const NoteState = (props) => {
+  // host of our api
+  const host = "http://localhost:5000";
+  // these the list of nodes which we will fetched
+  const note = [];
+  const [notes, setnote] = useState(note); // we have defined a state which we can fetch to other component from context
 
-const NoteState = (props)=>{    
-    // these the list of nodes which we have fetched 
-    const note = [
-    {
-              "_id": "649dfbd378a12db23434193b1",
-              "user": "649c93dcb4a051ba2d3b3d99",
-              "title": "Morning routine",
-              "description": "Wake up at 4 am and go for workout",
-              "tag": "Physical Goal",
-              "date": "2023-06-29T21:46:59.543Z",
-              "__v": 0
-            },
-            {
-              "_id": "649dfc2078a12db23434193d2",
-              "user": "649c93dcb4a051ba2d3b3d99",
-              "title": "Evening with a fixed routine",
-              "description": "Wake up at 4 am and go for workout",
-              "tag": "Physical Goal",
-              "date": "2023-06-29T21:48:16.492Z",
-              "__v": 0
-            },
-            {
-              "_id": "649dfc2078a12db23434193f3",
-              "user": "649c93dcb4a051ba2d3b3d99",
-              "title": "Morning routine",
-              "description": "Wake up at 4 am and go for workout",
-              "tag": "Physical Goal",
-              "date": "2023-06-29T21:48:16.687Z",
-              "__v": 0
-            },
-            {
-              "_id": "649dfc2078a12db2343419414",
-              "user": "649c93dcb4a051ba2d3b3d99",
-              "title": "Afternoon routine",
-              "description": "Wake up at 4 am and go for workout",
-              "tag": "Physical Goal",
-              "date": "2023-06-29T21:48:16.830Z",
-              "__v": 0
-            },
-            {
-              "_id": "649dfc2178a12db2343419435",
-              "user": "649c93dcb4a051ba2d3b3d99",
-              "title": "Morning routine",
-              "description": "Wake up at 4 am and go for workout",
-              "tag": "Physical Goal",
-              "date": "2023-06-29T21:48:17.012Z",
-              "__v": 0
-            }
-    ]
-    const [notes, setnote] = useState(note); // we have defined a state which we can fetch to other component from context 
+  // get all Notes
+  const getNote = async() => {
+    let url = `${host}/api/notes/fetchallnotes`;
+    const response = await fetch(url, {
+      method: "GET", // *GET, POST, PUT, DELETE, etc.
+      headers: {
+        "Content-Type": "application/json",
+        "auth-token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjQ5YzkzZGNiNGEwNTFiYTJkM2IzZDk5In0sImlhdCI6MTY4ODA3MDI2M30.pmwE2E_4UQBSY8XsFGAyNLVhvN-BwHRYDhG_2JHn8wQ"
+      },
+    });
+    const json = await response.json();
+    // console.log(json);
+    setnote(json);
+  };
+  // Add a Note
+  const addNote = async(title, description, tag) => {
+    // TODO : API calls
+    
+    let url = `${host}/api/notes/addnote`;
+    const response = await fetch(url, {
+      method: "POST", // *GET, POST, PUT, DELETE, etc.
+      headers: {
+        "Content-Type": "application/json",
+        "auth-token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjQ5YzkzZGNiNGEwNTFiYTJkM2IzZDk5In0sImlhdCI6MTY4ODA3MDI2M30.pmwE2E_4UQBSY8XsFGAyNLVhvN-BwHRYDhG_2JHn8wQ"
+      },
+      body: JSON.stringify({title, description , tag}), // body data type must match "Content-Type" header
+    });
+    const json = await response.json();
+    console.log(json);
+    console.log(`add a new note in db at id : ${json._id}`);
+    
+    let newNotes = JSON.parse(JSON.stringify(notes.concat(json))); 
+    setnote(newNotes); // it will return an new arry which is haing old data + new one
+    // getNote();
+  };
 
-    // Add a Note
-    const addNote = (title, description , tag)=>{
-      console.log("adding a new note");
-      const note = {
-        "_id": "649dfc2178a12db234341948",
-        "user": "649c93dcb4a051ba2d3b3d99",
-        "title": title,
-        "description": description,
-        "tag": tag,
-        "date": "2023-06-29T21:48:17.012Z",
-        "__v": 0
+  // Delete a Note
+  const deleteNote = async(noteID) => {
+    let url = `${host}/api/notes/deletenote/${noteID}`;
+    const response = await fetch(url, {
+      method: "DELETE", // *GET, POST, PUT, DELETE, etc.
+      headers: {
+        "Content-Type": "application/json",
+        "auth-token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjQ5YzkzZGNiNGEwNTFiYTJkM2IzZDk5In0sImlhdCI6MTY4ODA3MDI2M30.pmwE2E_4UQBSY8XsFGAyNLVhvN-BwHRYDhG_2JHn8wQ"
       }
-      setnote(notes.concat(note)); // it will return an new arry which is haing old data + new one 
-    }
-    
-    // Delete a Note 
-    const deleteNote = (noteID)=>{
-        console.log(`Deleting the node ${noteID}`);
-        const newNotes = note.filter((item) =>
-        {
-          console.log(item._id !== noteID);
-          return (item._id !== noteID)
-        });
-        setnote(newNotes);
-        console.log(newNotes);
-    }
-    
-    // Update a Note 
-    const editNote = (id, title, description , tag)=>{
-        console.log(`updating the note having id : ${id}`);
-    }
+    });
+    const json = await response.json();
+    console.log(json);
 
-    return (
-        // ginving state and update state as an parameter so that it can be access by files b/w them 
-        <NoteContext.Provider value={{notes,addNote , deleteNote , editNote}}>
-            {props.children}
-        </NoteContext.Provider>
-    )
-}
+    // console.log(`Deleting the node ${noteID}`);
+    // const newNotes = note.filter((item) => {return item._id !== noteID;});
+    // setnote(newNotes);
+    getNote();
+  };
+
+  // Update a Note
+  const editNote = async(id, title, description, tag) => {
+    // TODO : API calls (using fetch api  )
+    console.log(`Editing the note having id : ${id}`);
+
+    // using fetch api
+    // Example POST method implementation:
+    let url = `${host}/api/notes/updatenote/${id}`;
+    const response = await fetch(url, {
+      method: "PUT", // *GET, POST, PUT, DELETE, etc.
+      headers: {
+        "Content-Type": "application/json",
+        // 'Content-Type': 'application/x-www-form-urlencoded',
+        "auth-token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjQ5YzkzZGNiNGEwNTFiYTJkM2IzZDk5In0sImlhdCI6MTY4ODA3MDI2M30.pmwE2E_4UQBSY8XsFGAyNLVhvN-BwHRYDhG_2JHn8wQ"
+      },
+      body: JSON.stringify({title, description , tag}), // body data type must match "Content-Type" header
+    });
+    
+    const json = await response.json();
+    console.log(json);
+
+    // we cannot update notes directly using the notes itself 
+    // so we need a copy od the json string to store it
+    let newNotes = JSON.parse(JSON.stringify(notes)); 
+    // logic to edit in client
+    for (let index = 0; index < newNotes.length; index++) {
+      const element = notes[index];
+      if(element._id === id){
+        newNotes[index].title = title;
+        newNotes[index].description =description;
+        newNotes[index].tag = tag;
+        break;
+      }
+    }
+    setnote(newNotes);
+  };
+
+  return (
+    // ginving state and update state as an parameter so that it can be access by files b/w them
+    <NoteContext.Provider value={{ notes, addNote, deleteNote, editNote, getNote}}>
+      {props.children}
+    </NoteContext.Provider>
+  );
+};
 
 // eslint-disable-next-line
 export default NoteState;

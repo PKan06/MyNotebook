@@ -7,9 +7,9 @@ function Navbar() {
   // this will get us the end point location from where we can get which end point we are hiting
   let location = useLocation();
   // use effect to show this end point in console 
-  useEffect(() => {
-    console.log(location.pathname);
-  }, [location]);
+  // useEffect(() => {
+  //   console.log(location.pathname);
+  // }, [location]);
   return (
     <div>
       <nav className="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">

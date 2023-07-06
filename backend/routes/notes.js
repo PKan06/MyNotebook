@@ -21,18 +21,20 @@ async (req, res)=>{
 var Validaton_notes_schema = [
     
     // using express validator
-    body('title', ' Enter a valid title').isLength({min : 3}),
+    body('title', ' Enter a valid title must have 3 or more characters').isLength({min : 3}),
     body('description',"Description must be atleast 5 characters").isLength({min : 5}),
 ];
-router.post('/addnote',fetchuser,Validaton_notes_schema,
+// middel ware is required to send something through post
+router.post('/addnote',fetchuser,Validaton_notes_schema,express.json(),
 async(req,res)=>{
     try {
+        // console.log(req.body);
         const {title, description , tag} = req.body; // which is given by route1
         const error = validationResult(req); // validate using the express validator after fetchuser in this route
         
         if(!error.isEmpty()){
             // if error is there then it will say that it is not empty so we have put ! in front of it
-            return res.status(400).json({error: errors.array()});
+            return res.status(400).json({error: error.array()});
         }
         // new Notes has been created
         const note = new Note({
@@ -41,6 +43,7 @@ async(req,res)=>{
         // new Notes to db
         const saveNote = await note.save();
         res.json(saveNote);
+        console.log(saveNote);
     } catch (error) {
         console.log(error.message);
         res.status(500).send("Some error Occured");
@@ -90,7 +93,7 @@ router.delete('/deletenote/:id', fetchuser ,
 async(req,res)=>{
     try {
         // destructuring
-        const {title, description , tag} = req.body;
+        // const {title, description , tag} = req.body;
         
         // Find the note to be deleted and delete it
         let note  = await Note.findById(req.params.id); // this will fetch the note from db which has same id as given in the reqest url
