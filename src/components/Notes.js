@@ -35,7 +35,7 @@ const Notes = () => {
   return (
     <>
       <AddNote/> 
-      {/* to edit the noteitems */}
+      {/* to edit the noteitems we have used modal*/}
       <button ref={ref} type="button" className="btn btn-primary d-none" data-bs-toggle="modal" data-bs-target="#exampleModal">
         Launch demo modal
       </button>
@@ -72,7 +72,12 @@ const Notes = () => {
       </div>
 
       <div className='row my-4'>
-        <h2>Your Notes</h2>
+        <h2 >Your Notes</h2>
+        <div className='container mx-2'>
+          <h4>
+          {notes.length === 0 && 'HURRY UP !! Add some notes to Display'}
+          </h4>
+        </div>
         {notes.map((note)=>{
           // sending note as a prop
           return <Noteitem note={note} key={note._id} updateNote = {updateNotes} />
