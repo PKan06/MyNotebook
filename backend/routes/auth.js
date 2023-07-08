@@ -21,46 +21,48 @@ var Validaton_auth_schema = [
 router.post('/createuser',Validaton_auth_schema, 
 async (req, res)=>{
     const errors = validationResult(req); // if validation is sussesfull then error will be empty 
-        if(!errors.isEmpty())
-        {
-            // if error is not empty then it will send json file as a response to the user 
-            return res.status(400).json({error: errors.array()});
+    let success = false; // it will provide the json with the 0/1 value which we will display to show everything works fine
+    if(!errors.isEmpty())
+    {
+        // if error is not empty then it will send json file as a response to the user 
+        return res.status(400).json({success , error: errors.array()});
+    }
+    // res.send(req.body); // giving double header problem 
+    
+    try {
+        // checking any duplicate value of email in database 
+        let user = await User.findOne({email: req.body.email});// we have to wait until it will check our database for duplicate email entry
+        // we apply await before promis  
+        // console.log(user); // null if any user not find 
+        if(user){
+            // returning bad request as we found the user with the same email
+            return res.status(400).json({success ,'error':"Sorry a user with this email already exists"})
         }
-        // res.send(req.body); // giving double header problem 
-        
-        try {
-            // checking any duplicate value of email in database 
-            let user = await User.findOne({email: req.body.email});// we have to wait until it will check our database for duplicate email entry
-            // we apply await before promis  
-            // console.log(user); // null if any user not find 
-            if(user){
-                // returning bad request as we found the user with the same email
-                return res.status(400).json({'error':"Sorry a user with this email already exists"})
+        const salt = await bcrypt.genSalt(10); // genrating slat ehich will be added sfter password before saving to db
+        const secPass = await bcrypt.hash(req.body.password, salt);
+        user = await User.create({
+            name : req.body.name,
+            password: secPass, 
+            email : req.body.email
+        })
+        // defining the data part for the JWT token 
+        // As id is unique for every data mamber
+        // if the user again login then we will verify using jwt token if there any change with the heder, data, JWT_SECRET 
+        const data = {
+            user:{
+                id : user.id
             }
-            const salt = await bcrypt.genSalt(10); // genrating slat ehich will be added sfter password before saving to db
-            const secPass = await bcrypt.hash(req.body.password, salt);
-            user = await User.create({
-                name : req.body.name,
-                password: secPass, 
-                email : req.body.email
-            })
-            // defining the data part for the JWT token 
-            // As id is unique for every data mamber
-            // if the user again login then we will verify using jwt token if there any change with the heder, data, JWT_SECRET 
-            const data = {
-                user:{
-                    id : user.id
-                }
-            };
-            // read about session token && Json web token(HEADER.PAYLOAD.VARIFY_SIGNATURE)
-            const authtoken = jwt.sign(data, JWT_SECRET);
-            // given to user so that easy login afterwords
-            res.json({authtoken}); // authtoken => authtoken : authtoken
-            
-        } catch (error) {
-            console.log(error.message);
-            res.status(500).send("Some error Occured")
-        }
+        };
+        // read about session token && Json web token(HEADER.PAYLOAD.VARIFY_SIGNATURE)
+        const authtoken = jwt.sign(data, JWT_SECRET);
+        success = true;
+        // given to user so that easy login afterwords
+        res.json({success ,authtoken}); // authtoken => authtoken : authtoken
+        
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).send("Some error Occured")
+    }
 });
     
 // ROUTER 2: Authenticating a User using : POST "/api/auth/login". No login required
@@ -72,11 +74,12 @@ var Validaton_login_schema = [
 router.post('/login',Validaton_login_schema, 
 async (req,res)=>{
     // error from validation_login_schema
-    const errors = validationResult(req); // if validation is sussesfull then error will be empty 
+    const errors = validationResult(req); // if validation is sussesfull then error will be empty
+    let success = false; 
     if(!errors.isEmpty())
     {
         // if error is not empty then it will send json file as a response to the user 
-        return res.status(400).json({error: errors.array()});
+        return res.status(400).json({success ,error: errors.array()});
     }
     // Destructuring email,password
     const {email, password} = req.body;
@@ -85,14 +88,14 @@ async (req,res)=>{
         // if no user exist the undefine and we know somebody wants to break the authentication and getting in 
         // so we will display
         if(!user){
-            return res.status(400).json({error : "Please try to login with correct email"});
+            return res.status(400).json({success ,error : "Please try to login with correct email"});
         }
         // this will genrate hash using the password given by the user and check that hash with the stored value
         const passwordCompare = await bcrypt.compare(password, user.password);
         // if the password is wrong 
         // console.log(passwordCompare); -> promis will writen false if password is not correct 
         if(!passwordCompare){
-            return res.status(400).json({error : "Please try to login with correct password"});
+            return res.status(400).json({success , error : "Please try to login with correct password"});
         }
         // giving the data which is used to genrate JWT token 
         const data = {
@@ -102,7 +105,8 @@ async (req,res)=>{
         }
         const authtoken = jwt.sign(data, JWT_SECRET);
         // given to user so that easy login afterwords
-        res.json({authtoken}); // authtoken => authtoken : authtoken
+        success = true;
+        res.json({success,authtoken}); // authtoken => authtoken : authtoken
     } catch (error) {
         console.log(error.message);
         res.status(500).send("Some error Occured")

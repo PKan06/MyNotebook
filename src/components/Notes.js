@@ -3,7 +3,8 @@ import noteContext from '../context/notes/noteContext'
 import Noteitem from './Noteitem';
 import AddNote from './AddNote';
 
-const Notes = () => {
+const Notes = (props) => {
+  
   const Context = useContext(noteContext);
   const {notes,getNote, editNote} = Context;
   useEffect(()=>{
