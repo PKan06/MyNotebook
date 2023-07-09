@@ -1,16 +1,17 @@
 import React, { useContext, useState } from 'react'
 import noteContext from '../context/notes/noteContext'
 
-const AddNote = () => {
+const AddNote = (Props) => {
     const Context = useContext(noteContext);
     const {addNote} = Context;
-
+    const {showAlert} = Props;
     // defining a new state variable 
     const[note, setNote] = useState({title: "", description: "",tag: ""})
     
     const handelClick = (e)=>{
         e.preventDefault(); // not to reload the page while click on submit 
         addNote(note.title, note.description , note.tag);
+        showAlert("Congratulations!! Added a new notes","success");
         setNote({title: "", description: "",tag: ""});
     }
     const onChange = (e)=>{

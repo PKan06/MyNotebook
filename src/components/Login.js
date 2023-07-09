@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 
 const Login = (props) => {
-    // const {showAlert} = props;
+    const {showAlert} = props;
     const[credential , setCredential] = useState({email : "", password : ""});
     let history = useNavigate();
     const handelSubmit = async(e)=>{
@@ -23,11 +23,11 @@ const Login = (props) => {
             localStorage.setItem('token', json.authtoken);
             // using history hook to redirect 
             history("/");
-            // showAlert("Login in your accound ", "success");
+            showAlert("Loged in Successfully", "success");
           }
           else{
-            alert("Tnvalid credentials");
-            // showAlert("Tnvalid credentials", "warning");
+            // alert("Tnvalid credentials");
+            showAlert("Tnvalid credentials", "warning");
           }
     }
     const onChange = (e)=>{

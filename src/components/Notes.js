@@ -4,29 +4,31 @@ import Noteitem from './Noteitem';
 import AddNote from './AddNote';
 
 const Notes = (props) => {
-  
+  const {showAlert} = props;
   const Context = useContext(noteContext);
   const {notes,getNote, editNote} = Context;
   useEffect(()=>{
     getNote();
+    // showAlert("Welcome to MyNotebook web-app","success");
     // to use as componentDidmount
     // eslint-disable-next-line
   }, []);
   const ref = useRef(null);
   const refUpdate = useRef(null);
   const updateNotes = (CurrentNote)=>{
-      ref.current.click(); // this function is use to open the modal using its button 
-      // console.log("Button is clicked");
-      // problem will only be resolved if we tell them that we are using mtitle insted of title here
-      setNote({mid:CurrentNote._id, mtitle: CurrentNote.title , mdescription : CurrentNote.description, mtag : CurrentNote.tag});
+    ref.current.click(); // this function is use to open the modal using its button 
+    // console.log("Button is clicked");
+    // problem will only be resolved if we tell them that we are using mtitle insted of title here
+    setNote({mid:CurrentNote._id, mtitle: CurrentNote.title , mdescription : CurrentNote.description, mtag : CurrentNote.tag});
   }
-
+  
   const [note , setNote] = useState({mid:"",mtitle:"", mdescription: "",mtag: ""}); // new state for new form to fill for update notes 
   const handelClick = (e)=>{
     refUpdate.current.click();
     // e.preventDefault(); // not to reload the page while click on submit inside the form
     console.log(note); //-> this will show thw updated values of the notes 
     editNote(note.mid, note.mtitle , note.mdescription , note.mtag);
+    showAlert("Updated successfully","success");
   }
   const onChange = (e)=>{
     // this function will take care of the updated notes 
@@ -35,7 +37,7 @@ const Notes = (props) => {
   }
   return (
     <>
-      <AddNote/> 
+      <AddNote showAlert={showAlert}/> 
       {/* to edit the noteitems we have used modal*/}
       <button ref={ref} type="button" className="btn btn-primary d-none" data-bs-toggle="modal" data-bs-target="#exampleModal">
         Launch demo modal
@@ -81,7 +83,7 @@ const Notes = (props) => {
         </div>
         {notes.map((note)=>{
           // sending note as a prop
-          return <Noteitem note={note} key={note._id} updateNote = {updateNotes} />
+          return <Noteitem note={note} key={note._id} updateNote = {updateNotes} showAlert={showAlert}/>
         })}
       </div>
     </>

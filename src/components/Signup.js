@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 
-function Signup() {
+function Signup(props) {
   // creating a credential state to record the updated user data in the form  
+  const {showAlert} = props;
   const [credentials, setCredential] = useState({email:"", password:"", name:"", cpassword :""});
   const history = useNavigate();
   const handelSubmit = async(e)=>{
@@ -23,11 +24,13 @@ function Signup() {
       if(json.success){
         // saving the auth token to local storage and redirect
         localStorage.setItem('token', json.authtoken);
+        showAlert("Account created Succesfully", "success");
         // using history hook to redirect 
         history("/login");
       }
       else{
-        alert("Tnvalid credentials");
+        // alert("Tnvalid credentials");
+        showAlert("Tnvalid credentials", "warning");
       }
   }
   // store the user updated data in the credential state in runtime 
@@ -54,7 +57,7 @@ function Signup() {
           <label htmlFor="cpassword" className="form-label">Password</label>
           <input type="password" className="form-control" id="cpassword" name='cpassword' onChange={onChnage} minLength={5} required/>
         </div>
-        <button type="submit" className="btn btn-primary">Submit</button>
+        <button disabled = {credentials.password !== credentials.cpassword} type="submit" className="btn btn-primary">Submit</button>
       </form>
     </div>
   )
