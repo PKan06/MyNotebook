@@ -2,14 +2,20 @@ import { useContext, useEffect ,useRef, useState} from 'react'
 import noteContext from '../context/notes/noteContext'
 import Noteitem from './Noteitem';
 import AddNote from './AddNote';
+import { useNavigate } from 'react-router-dom';
 
 const Notes = (props) => {
   const {showAlert} = props;
   const Context = useContext(noteContext);
   const {notes,getNote, editNote} = Context;
+  const history = useNavigate();
   useEffect(()=>{
-    getNote();
-    // showAlert("Welcome to MyNotebook web-app","success");
+    if(localStorage.getItem('token'))
+    {
+      getNote();
+      // showAlert("Welcome to MyNotebook web-app","success");
+    }
+    else {history("/login")}
     // to use as componentDidmount
     // eslint-disable-next-line
   }, []);
