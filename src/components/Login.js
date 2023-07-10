@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate , Link} from 'react-router-dom';
 
 const Login = (props) => {
     const {showAlert} = props;
@@ -36,20 +36,21 @@ const Login = (props) => {
         setCredential({...credential, [e.target.name]: e.target.value})
       }
   return (
-    <div className='my-4'>
-      <h2 className='my-4'>Login to continue to MyNotebook</h2>
-      <div className='container' onSubmit={handelSubmit}>
+    <div className='text-center single-form-page' >
+      <h2 className='my-4 '>Login</h2>
+      <div className='container'  style={{width: 23+'rem'}} onSubmit={handelSubmit}>
         <form>
-          <div className="mb-3">
-              <label htmlFor="email" className="form-label">Email address</label>
-              <input type="email" className="form-control" id="email" name='email' aria-describedby="emailHelp" onChange={onChange}/>
+          <div className="mb-3 form-floating">
+              <input type="email" className="form-control" id="floatingemail" name='email' placeholder="name@example.com" onChange={onChange}/>
+              <label htmlFor="floatingemail" >Email address</label>
               <div id="emailHelp" className="form-text">We'll never share your email with anyone else.</div>
           </div>
-          <div className="mb-3">
-              <label htmlFor="password" className="form-label">Password</label>
-              <input type="password" className="form-control" id="password" name="password" onChange={onChange}/>
+          <div className="mb-3 form-floating">
+              <input type="password" className="form-control" id="floatingpassword" name="password" placeholder="Password" onChange={onChange}/>
+              <label htmlFor="floatingpassword">Password</label>
           </div>
-          <button type="submit" className="btn btn-primary">Submit</button>
+          <button type="submit" className=" w-50 btn btn-danger">Submit</button>
+          <p className="mt-5 mb-3 text-muted">© 2023</p>
           </form>
       </div>
     </div>

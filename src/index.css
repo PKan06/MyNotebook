@@ -5,13 +5,43 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background: #abaaaa;
+  color: #720707;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  monospace;
 }
 
 i:hover{
   cursor: pointer;
+}
+
+label{
+  font-size: 20px;
+}
+
+.single-form-page{
+  height: 100%;
+  padding-top: 50px;
+  padding-bottom : 50px;
+}
+.card{
+  background: #d0ababb2;
+  color: #000;
+  border-radius: 1rem;
+}
+
+.modal-content{
+  background: #abaaaa;
+  color: #720707;
+}
+
+.card-title:hover{
+  cursor: pointer;
+}
+
+.form-control{
+  background: #c5aaaa81;
 }

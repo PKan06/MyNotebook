@@ -36,8 +36,8 @@ function Navbar() {
               </ul>
               {/* using ternary operator */}
               {!localStorage.getItem('token') ? <form className="d-flex" role="search">
-                  <Link className='btn btn-danger mx-1' type='button' to='/login'>Login</Link>
-                  <Link className='btn btn-danger mx-1' type='button' to='/signup'>Sign Up</Link>
+              {(location.pathname !== "/login") && <Link className='btn btn-danger mx-1' type='button' to='/login'>Login</Link>}
+              {(location.pathname !== "/signup") && <Link className='btn btn-danger mx-1' type='button' to='/signup'>Sign Up</Link>}
                 </form>:<Link className='btn btn-danger mx-1' type='button' onClick={handelLogout} to="/login">Logout</Link>}
             </div>
         </div>

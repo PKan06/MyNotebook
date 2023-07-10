@@ -33,9 +33,10 @@ const AddNote = (Props) => {
           </div>
           <div className="mb-3">
             <label htmlFor="description" className="form-label">Description</label>
-            <input type="text" className="form-control" id="description" name = "description" value={note.description} placeholder='Add a description at lest 5 characters long' onChange={onChange} minLength={5} required/>
+            {/* <input type="text" className="form-control" id="description" name = "description" value={note.description} placeholder='Add a description at lest 5 characters long' onChange={onChange} minLength={5} required/> */}
+            <textarea type="text" className="form-control" id="description" name = "description" value={note.description} placeholder='Add a description at lest 5 characters long' onChange={onChange} minLength={5} required/>
           </div>
-          <button disabled={note.title.length < 5 || note.description.length < 5 || note.tag.length < 3} type="submit" className="btn btn-primary" onClick = {handelClick}>Add Note</button>
+          <button disabled={note.title.length < 5 || note.description.length < 5 || note.tag.length < 3} type="submit" className="btn btn-danger" onClick = {handelClick}>Add Note</button>
         </form>
       </div>
     </div>

@@ -38,27 +38,33 @@ function Signup(props) {
     setCredential({...credentials, [e.target.name]: e.target.value});
   }
   return (
-    <div className='container' onSubmit={handelSubmit}>
-      <form>
-        <div className="mb-3">
-          <label htmlFor="name" className="form-label">Name</label>
-          <input type="text" className="form-control" id="name" aria-describedby="emailHelp" name='name' onChange={onChnage}/>
-        </div>
-        <div className="mb-3">
-          <label htmlFor="email" className="form-label">Email address</label>
-          <input type="email" className="form-control" id="email" aria-describedby="emailHelp" name='email' onChange={onChnage}/>
-          <div id="emailHelp" className="form-text">We'll never share your email with anyone else.</div>
-        </div>
-        <div className="mb-3">
-          <label htmlFor="password" className="form-label">Password</label>
-          <input type="password" className="form-control" id="password" name='password' onChange={onChnage} minLength={5} required/>
-        </div>
-        <div className="mb-3">
-          <label htmlFor="cpassword" className="form-label">Password</label>
-          <input type="password" className="form-control" id="cpassword" name='cpassword' onChange={onChnage} minLength={5} required/>
-        </div>
-        <button disabled = {credentials.password !== credentials.cpassword} type="submit" className="btn btn-primary">Submit</button>
-      </form>
+    <div className='text-center single-form-page'>
+      <h2 className='my-4 '>Sign Up</h2>
+      <p className = 'mb-5' style={{fontSize : 1.3 + 'rem'}}>Hurry Up!! Start your MyNotebook journey with us </p>
+      <div className='container ' style={{width: 23+'rem'}} onSubmit={handelSubmit}>
+        <form>
+          <div className="mb-3 form-floating">
+            <input type="text" className="form-control " id="name" name='name' placeholder='Name' onChange={onChnage}/>
+            <label htmlFor="name" >Name</label>
+          </div>
+          <div className="mb-3 form-floating">
+            <input type="email" className="form-control" id="email"  name='email' placeholder='Email Address' onChange={onChnage}/>
+            <label htmlFor="email" >Email address</label>
+            <div id="emailHelp" className="form-text">We'll never share your email with anyone else.</div>
+          </div>
+          <div className="mb-3 form-floating">
+            <input type="password" className="form-control" id="password" name='password' placeholder='Password' onChange={onChnage} minLength={5} required/>
+            <label htmlFor="password" className="form-label">Password</label>
+          </div>
+          <div className="mb-3 form-floating">
+            <input type="password" className="form-control" id="cpassword" name='cpassword' placeholder='Retype Password' onChange={onChnage} minLength={5} required/>
+            <label htmlFor="cpassword" className="form-label">Retype Password</label>
+          </div>
+          <button disabled = {credentials.password !== credentials.cpassword} type="submit" className="btn btn-danger w-50">Submit</button>
+          <p className="mt-5 mb-3 text-muted">© 2023</p>
+
+        </form>
+      </div>
     </div>
   )
 }
