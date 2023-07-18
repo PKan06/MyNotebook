@@ -22,6 +22,11 @@ label{
   font-size: 20px;
 }
 
+textarea {
+  width: 300px;
+  height:  300px;
+}
+
 .single-form-page{
   height: 100%;
   padding-top: 50px;
@@ -40,8 +45,22 @@ label{
 
 .card-title:hover{
   cursor: pointer;
+  font-weight: bold;
 }
 
 .form-control{
   background: #c5aaaa81;
+}
+
+.text-wrap{
+  word-wrap: break-word;
+  
+}
+
+.showdesc{
+  border: 2px solid #c8c8c8;
+  border-radius: 20px;
+  background: #896e6e4d;
+  padding: 10px 15px ;
+  word-wrap: break-word;
 }

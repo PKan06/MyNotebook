@@ -39,14 +39,19 @@ const Notes = (props) => {
   const onChange = (e)=>{
     // this function will take care of the updated notes 
     // as they are reflected in real time in react developer tools
-      setNote({...note, [e.target.name]: e.target.value})
+    setNote({...note, [e.target.name]: e.target.value})
   }
+  const refshow = useRef(null);
+  const showNote = (CurrentNote)=>{
+    refshow.current.click();
+    setNote({mid:CurrentNote._id, mtitle: CurrentNote.title , mdescription : CurrentNote.description, mtag : CurrentNote.tag});
+  };
   return (
     <>
       <AddNote showAlert={showAlert}/> 
       {/* to edit the noteitems we have used modal*/}
       <button ref={ref} type="button" className="btn btn-primary d-none" data-bs-toggle="modal" data-bs-target="#exampleModal">
-        Launch demo modal
+        Launch edit modal
       </button>
 
       <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -79,6 +84,28 @@ const Notes = (props) => {
           </div>
         </div>
       </div>
+      {/* edit modal created  */}
+      <button ref={refshow} type="button" className="btn btn-primary d-none" data-bs-toggle="modal" data-bs-target="#exampleModal1">
+        Launch show modal
+      </button>
+
+      <div className="modal fade" id="exampleModal1" tabIndex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true">
+        <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h3 className="modal-title text-wrap text-center" id="exampleModalLabel1" style={{width: 26+'rem'}}>{note.mtitle}</h3>
+              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div className='container my-4'>
+              <h5 className="card-subtitle mb-2 text-body-secondary">{note.mtag}</h5>
+              <p className="card-text showdesc" style={{fontSize: 30+'px'}}>
+                {note.mdescription}
+              </p>
+            </div> 
+          </div>
+        </div>
+      </div>
+      {/* show modal created */}
 
       <div className='row my-4'>
         <h2 >Your Notes</h2>
@@ -89,7 +116,7 @@ const Notes = (props) => {
         </div>
         {notes.map((note)=>{
           // sending note as a prop
-          return <Noteitem note={note} key={note._id} updateNote = {updateNotes} showAlert={showAlert}/>
+          return <Noteitem note={note} key={note._id} updateNote = {updateNotes} showAlert={showAlert} showNote={showNote}/>
         })}
       </div>
     </>
