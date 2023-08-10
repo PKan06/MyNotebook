@@ -6,7 +6,7 @@ var bcrypt = require('bcrypt'); // bcrypt -> to add a salt on a password to conv
 var jwt = require('jsonwebtoken'); // token is use to sepecify the regular user crediential whether the user modified anything or not  
 var fetchuser = require('../middleware/fetchuser')
 
-const JWT_SECRET = "Mehavingagood$$$$"; // this is my VARIFY_SIGNATURE for JWT 
+const {JWT_SECRET} = require('../config/keys'); // this is my VARIFY_SIGNATURE for JWT 
 
 // ROUTER 1: Create a User using : POST"/api/auth/createuser" 
 // this will check the validation of the post req send by the user on user.js if fine then add to database 

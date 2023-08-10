@@ -43,7 +43,7 @@ async(req,res)=>{
         // new Notes to db
         const saveNote = await note.save();
         res.json(saveNote);
-        console.log(saveNote);
+        // console.log(saveNote);
     } catch (error) {
         console.log(error.message);
         res.status(500).send("Some error Occured");

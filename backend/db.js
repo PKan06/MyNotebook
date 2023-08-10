@@ -1,5 +1,5 @@
  const mongoose = require('mongoose');
- const mongoURI = "mongodb://localhost:27017/mynotebook?directConnection=true"
+ const {mongoURI} =  require('./config/keys');
 
  const connectToMongo = async () => {
     try {
