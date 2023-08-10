@@ -20,7 +20,8 @@ if(process.env.NODE_ENV=='production'){
   app.get('/',(req,res)=>{
     // handeling the static file 
     app.use(express.static(__dirname,'backend', 'build'))
-    res.sendFile(path.resolve(__dirname,'backend','build','index.html'))
+    // res.sendFile(path.resolve(__dirname,'backend','build','index.html'))
+    res.json("hello")
   })
 }
 
