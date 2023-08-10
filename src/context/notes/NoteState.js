@@ -36,8 +36,8 @@ const NoteState = (props) => {
       body: JSON.stringify({title, description , tag}), // body data type must match "Content-Type" header
     });
     const json = await response.json();
-    console.log(json);
-    console.log(`add a new note in db at id : ${json._id}`);
+    // console.log(json);
+    // console.log(`add a new note in db at id : ${json._id}`);
     
     let newNotes = JSON.parse(JSON.stringify(notes.concat(json))); 
     setnote(newNotes); // it will return an new arry which is haing old data + new one
