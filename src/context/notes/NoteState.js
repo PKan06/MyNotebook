@@ -3,7 +3,7 @@ import NoteContext from "./noteContext";
 
 const NoteState = (props) => {
   // host of our api
-  const host = "http://localhost:5000";
+  const host = "https://my-notebook-omega.vercel.app";
   // these the list of nodes which we will fetched
   const note = [];
   const [notes, setnote] = useState(note); // we have defined a state which we can fetch to other component from context

@@ -8,7 +8,7 @@ function Signup(props) {
   const history = useNavigate();
   const handelSubmit = async(e)=>{
     e.preventDefault();
-    const url = `http://localhost:5000/api/auth/createuser`;
+    const url = `https://my-notebook-omega.vercel.app/api/auth/createuser`;
     const {name , email , password} = credentials;
     const response = await fetch(url, {
         // destructuring 

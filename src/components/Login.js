@@ -7,7 +7,7 @@ const Login = (props) => {
     let history = useNavigate();
     const handelSubmit = async(e)=>{
         e.preventDefault();
-        const url = `http://localhost:5000/api/auth/login`;
+        const url = `https://my-notebook-omega.vercel.app/api/auth/login`;
         const response = await fetch(url, {
             method: "POST", 
             headers: {
