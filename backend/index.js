@@ -24,12 +24,6 @@ if(process.env.NODE_ENV=='production'){
     res.json("hello")
   })
 }
-app.get('/',(req,res)=>{
-  // handeling the static file 
-  // app.use(express.static(__dirname,'backend', 'build'))
-  // res.sendFile(path.resolve(__dirname,'backend','build','index.html'))
-  res.json("hello")
-})
 
 app.listen(port, () => {
   console.log(`MYNotebook listening on port ${port}`)
