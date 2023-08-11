@@ -1,4 +1,4 @@
 module.exports={
     JWT_SECRET : process.env.JWT_SECRET,
-    mongoURI:process.env.MONGOURI
+    mongoURI:process.env.MONGODB_URI
 }
